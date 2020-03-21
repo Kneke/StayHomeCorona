@@ -93,7 +93,7 @@ func UpdateUser(user model.User, challengeId int, challengePoints int) (string, 
 	}
 
 	//Insert done challenge in User-Challenge Table
-	stmtIns2, err := db.Prepare("INSERT INTO UserChallenge (User, Challenge) VALUES(?,?)")
+	stmtIns2, err := db.Prepare("INSERT INTO UserChallenge (UC_User, UC_Challenge) VALUES(?,?)")
 	if err != nil {
 		return "Failure", err
 	}
