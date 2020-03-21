@@ -41,15 +41,18 @@ func GetChallenges() []model.Challenge {
 	if err != nil {
 		panic(err)
 	}
-	var response []model.Challenge
-	result, err := db.Query("SELECT * FROM Challenges")
+
+	rows, err := db.Query("SELECT * FROM Challenges")
 	if err != nil {
 		panic(err)
 	}
-	for result.Next() {
+	defer rows.Close()
+
+	var response []model.Challenge
+	for rows.Next() {
 		var id, points int
 		var title, description, category string
-		err = result.Scan(&id, &title, &description, &category, &points)
+		err = rows.Scan(&id, &title, &description, &category, &points)
 
 		response = append(response, model.Challenge{ChallengeID: id, ChallengeTitle: title, ChallengeDescription: description, ChallengeCategory: category, ChallengePoints: points})
 	}
@@ -63,7 +66,7 @@ func CreateUser(user model.User) (string, error) {
 		panic(err)
 	}
 
-	stmtIns, err := db.Prepare("INSERT INTO User (ID, Name, Score) VALUES(?, ?, ?, ?)")
+	stmtIns, err := db.Prepare("INSERT INTO Users (UserID, UserName, UserScore) VALUES(?, ?, ?)")
 	if err != nil {
 		return "Failure", err
 	}
@@ -74,7 +77,7 @@ func CreateUser(user model.User) (string, error) {
 	return "Success", nil
 }
 
-func UpdateUser(user model.User, challengeId int, challengePoints int) (string, error) {
+func UpdateUser(userupdate model.UserUpdate) (string, error) {
 	db, err := connectToMySQL()
 	defer db.Close()
 	if err != nil {
@@ -82,12 +85,11 @@ func UpdateUser(user model.User, challengeId int, challengePoints int) (string, 
 	}
 
 	//Update Score in User
-	stmtIns, err := db.Prepare("UPDATE User SET Score=? WHERE ID=?")
+	stmtIns, err := db.Prepare("UPDATE Users SET UserScore=UserScore+? WHERE UserID=?")
 	if err != nil {
 		return "Failure", err
 	}
-	userScore := user.UserScore + challengePoints
-	_, err = stmtIns.Exec(userScore, user.UserID)
+	_, err = stmtIns.Exec(userupdate.Points, userupdate.UserID)
 	if err != nil {
 		return "Failure", err
 	}
@@ -97,7 +99,7 @@ func UpdateUser(user model.User, challengeId int, challengePoints int) (string, 
 	if err != nil {
 		return "Failure", err
 	}
-	_, err = stmtIns2.Exec(user.UserID, challengeId)
+	_, err = stmtIns2.Exec(userupdate.UserID, userupdate.ChallengeID)
 	if err != nil {
 		return "Failure", err
 	}
@@ -112,22 +114,22 @@ func GetRanking() model.Ranking {
 	if err != nil {
 		panic(err)
 	}
-	result, err := db.Query("SELECT * FROM User")
+	rows, err := db.Query("SELECT UserName, UserScore FROM Users")
 	if err != nil {
 		panic(err)
 	}
-	for result.Next() {
+	defer rows.Close()
+
+	for rows.Next() {
 		var (
 			score int
 			name  string
 		)
-		err = result.Scan(&name, &score)
-
+		err = rows.Scan(&name, &score)
 		ranking.UserRankList = append(ranking.UserRankList, model.UserRank{
 			Name:  name,
 			Score: score,
 		})
 	}
-
 	return ranking
 }
