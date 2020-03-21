@@ -24,13 +24,6 @@ func CreateChallenge(challenge model.Challenge) (string, error) {
 		panic(err)
 	}
 
-	// _, err = db.Query("INSERT INTO Challenges(ID, Title, Description, Category, Points) VALUES($1, $2, $3, $4, $5)", challenge.ID, challenge.Title, challenge.Description, challenge.Category, challenge.Points)
-	// if err != nil {
-	// 	return "Failure", err
-	// }
-	// return "Success", nil
-
-	// Insert several books
 	stmtIns, err := db.Prepare("INSERT INTO Challenges (ID, Title, Description, Category, Points) VALUES(?, ?,?,?,?)")
 	if err != nil {
 		return "Failure", err
@@ -56,9 +49,76 @@ func GetChallenges() []model.Challenge {
 	for result.Next() {
 		var id, points int
 		var title, description, category string
-		result.Scan(&id, &title, &description, &category, &points)
+		err = result.Scan(&id, &title, &description, &category, &points)
 
 		response = append(response, model.Challenge{ID: id, Title: title, Description: description, Category: category, Points: points})
 	}
 	return response
+}
+
+func CreateUser(user model.User) (string, error) {
+	db, err := connectToMySQL()
+	defer db.Close()
+	if err != nil {
+		panic(err)
+	}
+
+	stmtIns, err := db.Prepare("INSERT INTO User (ID, Name, Score, Challenges) VALUES(?, ?, ?, ?)")
+	if err != nil {
+		return "Failure", err
+	}
+	_, err = stmtIns.Exec(user.ID, user.Name, user.Score, user.Challenges)
+	if err != nil {
+		return "Failure", err
+	}
+	return "Success", nil
+}
+
+func UpdateUser(user model.User, challengeId int, challengePoints int) (string, error) {
+	db, err := connectToMySQL()
+	defer db.Close()
+	if err != nil {
+		panic(err)
+	}
+
+	stmtIns, err := db.Prepare("UPDATE User SET Challenges=?, Score=? WHERE ID=?")
+	if err != nil {
+		return "Failure", err
+	}
+
+	userScore := user.Score + challengePoints
+	user.Challenges = append(user.Challenges, challengeId) //TODO geht das?
+
+	_, err = stmtIns.Exec(user.Challenges, userScore, user.ID)
+	if err != nil {
+		return "Failure", err
+	}
+	return "Success", nil
+}
+
+func GetRanking() model.Ranking {
+	var ranking model.Ranking
+
+	db, err := connectToMySQL()
+	if err != nil {
+		panic(err)
+	}
+	result, err := db.Query("SELECT * FROM User")
+	if err != nil {
+		panic(err)
+	}
+	for result.Next() {
+		var (
+			score int
+			name  string
+		)
+		err = result.Scan(&name, &score)
+
+		ranking.UserRankList = append(ranking.UserRankList, model.UserRank{
+			Name:  name,
+			Score: score,
+		})
+	}
+
+	return ranking
 }

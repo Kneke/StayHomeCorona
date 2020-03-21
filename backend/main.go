@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"main/model"
 	"main/persistence"
 
@@ -9,14 +10,26 @@ import (
 
 func main() {
 	r := gin.Default()
-	r.POST("/challenges", createChallengeHandler)
-	r.GET("/challenges", challengeHandler)
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
+
+	v1 := r.Group("/v1")
+	{
+		v1.POST("/challenges", createChallengeHandler)
+		v1.GET("/challenges", challengeHandler)
+		v1.POST("/user", createUser)
+		v1.POST("/updateUser", updateUser)
+		v1.GET("/ranking", getRanking)
+
+		v1.GET("/ping", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"message": "pong",
+			})
 		})
-	})
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	}
+
+	err := r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	if err != nil {
+		fmt.Print(err)
+	}
 }
 
 func challengeHandler(c *gin.Context) {
@@ -30,6 +43,49 @@ func createChallengeHandler(c *gin.Context) {
 	var challenge model.Challenge
 	if c.BindJSON(&challenge) == nil {
 		result, err := persistence.CreateChallenge(challenge)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"error": err,
+			})
+		}
+		c.JSON(200, gin.H{
+			"result": result,
+		})
+	}
+	c.JSON(500, gin.H{
+		"error": "Bad Request, could not marshal JSON to Object",
+	})
+}
+
+func getRanking(c *gin.Context) {
+	ranking := persistence.GetRanking()
+	c.JSON(200, gin.H{
+		"values": ranking,
+	})
+}
+
+func createUser(c *gin.Context) {
+	var user model.User
+	if c.BindJSON(&user) == nil {
+		result, err := persistence.CreateUser(user)
+		if err != nil {
+			c.JSON(400, gin.H{
+				"error": err,
+			})
+		}
+		c.JSON(200, gin.H{
+			"result": result,
+		})
+	}
+	c.JSON(500, gin.H{
+		"error": "Bad Request, could not marshal JSON to Object",
+	})
+}
+
+func updateUser(c *gin.Context) {
+	var user model.User
+	if c.BindJSON(&user) == nil {
+		result, err := persistence.UpdateUser(user, 11, 11)
 		if err != nil {
 			c.JSON(400, gin.H{
 				"error": err,
