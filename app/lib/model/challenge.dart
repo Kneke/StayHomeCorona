@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -18,3 +19,4 @@ class Challenge {
   Map<String, dynamic> toJson() => _$ChallengeToJson(this);
   String toJsonString() => _$ChallengeToJson(this).toString();
 }
+
