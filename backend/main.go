@@ -16,7 +16,7 @@ func main() {
 		v1.POST("/challenges", createChallengeHandler)
 		v1.GET("/challenges", challengeHandler)
 		v1.POST("/user", createUser)
-		v1.POST("/challengeDone", challangeDoneHandler)
+		v1.POST("/challengeDone", challengeDoneHandler)
 		v1.GET("/ranking", getRanking)
 
 		v1.GET("/ping", func(c *gin.Context) {
@@ -82,7 +82,7 @@ func createUser(c *gin.Context) {
 	})
 }
 
-func challangeDoneHandler(c *gin.Context) {
+func challengeDoneHandler(c *gin.Context) {
 	var userupdate model.UserUpdate
 	if c.BindJSON(&userupdate) == nil {
 		result, err := persistence.UpdateUser(userupdate)

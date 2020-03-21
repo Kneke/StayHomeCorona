@@ -7,14 +7,9 @@ type User struct {
 }
 
 type UserUpdate struct {
-	UserID    int    `json:"userid"`
-	ChallengeID string `json:"challengeid"`
-	Points     int    `json:"points"`
-}
-
-type ChallengeDoneJson struct {
-	UserID    int    `json:"userid"`
-	Challenge string `json:"challenge"`
+	UserID      int `json:"userid"`
+	ChallengeID int `json:"challengeid"`
+	Points      int `json:"points"`
 }
 
 //DROP TABLE IF EXISTS Challenges
