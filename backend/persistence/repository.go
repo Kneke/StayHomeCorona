@@ -63,7 +63,7 @@ func CreateUser(user model.User) (string, error) {
 		panic(err)
 	}
 
-	stmtIns, err := db.Prepare("INSERT INTO User (ID, Name, Score) VALUES(?, ?, ?, ?)")
+	stmtIns, err := db.Prepare("INSERT INTO Users (ID, Name, Score) VALUES(?, ?, ?, ?)")
 	if err != nil {
 		return "Failure", err
 	}
@@ -74,7 +74,7 @@ func CreateUser(user model.User) (string, error) {
 	return "Success", nil
 }
 
-func UpdateUser(user model.User, challengeId int, challengePoints int) (string, error) {
+func UpdateUser(userupdate model.UserUpdate) (string, error) {
 	db, err := connectToMySQL()
 	defer db.Close()
 	if err != nil {
@@ -82,12 +82,11 @@ func UpdateUser(user model.User, challengeId int, challengePoints int) (string, 
 	}
 
 	//Update Score in User
-	stmtIns, err := db.Prepare("UPDATE User SET Score=? WHERE ID=?")
+	stmtIns, err := db.Prepare("UPDATE Users SET Score=Score+? WHERE ID=?")
 	if err != nil {
 		return "Failure", err
 	}
-	userScore := user.UserScore + challengePoints
-	_, err = stmtIns.Exec(userScore, user.UserID)
+	_, err = stmtIns.Exec(userupdate.Points, userupdate.UserID)
 	if err != nil {
 		return "Failure", err
 	}
@@ -97,7 +96,7 @@ func UpdateUser(user model.User, challengeId int, challengePoints int) (string, 
 	if err != nil {
 		return "Failure", err
 	}
-	_, err = stmtIns2.Exec(user.UserID, challengeId)
+	_, err = stmtIns2.Exec(userupdate.UserID, userupdate.ChallengeID)
 	if err != nil {
 		return "Failure", err
 	}
@@ -112,7 +111,7 @@ func GetRanking() model.Ranking {
 	if err != nil {
 		panic(err)
 	}
-	result, err := db.Query("SELECT * FROM User")
+	result, err := db.Query("SELECT * FROM Users")
 	if err != nil {
 		panic(err)
 	}

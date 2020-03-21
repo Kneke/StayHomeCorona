@@ -6,6 +6,17 @@ type User struct {
 	UserScore int    `json:"score"`
 }
 
+type UserUpdate struct {
+	UserID    int    `json:"userid"`
+	ChallengeID string `json:"challengeid"`
+	Points     int    `json:"points"`
+}
+
+type ChallengeDoneJson struct {
+	UserID    int    `json:"userid"`
+	Challenge string `json:"challenge"`
+}
+
 //DROP TABLE IF EXISTS Challenges
 
 //CREATE TABLE Users(
