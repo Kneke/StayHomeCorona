@@ -1,4 +1,5 @@
 import 'package:app/model/challenge.dart';
+import 'package:app/ui/challenge_card.dart';
 import 'package:flutter/material.dart';
 
 
@@ -30,8 +31,8 @@ Future<String> _calculation = Future<String>.delayed(
 
 Future<String> _response = Future<String>.delayed(
   Duration(seconds: 2),
-      () =>
-  '{ "values": [{ "id": 1, "title": "Fairness fordern", "points": 25 }] }',
+  () =>
+      '{ "values": [{ "id": 1, "title": "Fairness fordern", "points": 25 }, { "id": 2, "title": "Aufgeschobenes erledigen", "points": 10 }] }',
 );
 
 Future<List<dynamic>> _loadChallenges() async {
@@ -63,18 +64,28 @@ class _MyChallengesPageState extends State<MyChallengesPage> {
         List<Widget> children;
 
         if (snapshot.hasData) {
-          children = <Widget>[
-            Icon(
-              Icons.check_circle_outline,
-              color: Colors.green,
-              size: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Text('Result: ${snapshot.data}'),
-            )
+          children = [
+//            Icon(
+//              Icons.check_circle_outline,
+//              color: Colors.green,
+//              size: 60,
+//            ),
+            Row(children: [Text('Daily Challenges')]),
+            ...snapshot.data
+                .map((challenge) => ChallengeCard(challenge: challenge))
+                .toList(),
+            Row(children: [Text('Accepted Challenges')]),
+            ...snapshot.data
+                .map((challenge) => ChallengeCard(challenge: challenge))
+                .toList(),
           ];
+//            ChallengeCard(challenge: snapshot.data[0])
+//            Padding(
+//              padding: const EdgeInsets.only(top: 16),
+//              child: Text('Result: ${snapshot.data}'),
+//            }
         } else if (snapshot.hasError) {
+
           children = <Widget>[
             Icon(
               Icons.error_outline,
@@ -87,6 +98,8 @@ class _MyChallengesPageState extends State<MyChallengesPage> {
             )
           ];
         } else {
+
+          // TODO
           children = <Widget>[
             SizedBox(
               child: CircularProgressIndicator(),
@@ -95,17 +108,18 @@ class _MyChallengesPageState extends State<MyChallengesPage> {
             ),
             const Padding(
               padding: EdgeInsets.only(top: 16),
-              child: Text('Awaiting result...'),
+              child: Text('Lade Challenges...'),
             )
           ];
         }
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: children,
-          ),
-        );
+//        return Center(
+//          child: Column(
+//            mainAxisAlignment: MainAxisAlignment.center,
+//            crossAxisAlignment: CrossAxisAlignment.center,
+//            children: children,
+//          ),
+//        );
+        return SingleChildScrollView(child: Column(children: children));
       },
     );
   }
