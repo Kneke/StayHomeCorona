@@ -24,11 +24,11 @@ func CreateChallenge(challenge model.Challenge) (string, error) {
 		panic(err)
 	}
 
-	stmtIns, err := db.Prepare("INSERT INTO Challenges (ID, Title, Description, Category, Points) VALUES(?, ?,?,?,?)")
+	stmtIns, err := db.Prepare("INSERT INTO Challenges (ChallengeID, ChallengeTitle, ChallengeDescription, ChallengeCategory, ChallengePoints) VALUES(?, ?,?,?,?)")
 	if err != nil {
 		return "Failure", err
 	}
-	_, err = stmtIns.Exec(challenge.ID, challenge.Title, challenge.Description, challenge.Category, challenge.Points)
+	_, err = stmtIns.Exec(challenge.ChallengeID, challenge.ChallengeTitle, challenge.ChallengeDescription, challenge.ChallengeCategory, challenge.ChallengePoints)
 	if err != nil {
 		return "Failure", err
 	}
@@ -41,7 +41,7 @@ func GetChallenges() []model.Challenge {
 	if err != nil {
 		panic(err)
 	}
-	response := []model.Challenge{}
+	var response []model.Challenge
 	result, err := db.Query("SELECT * FROM Challenges")
 	if err != nil {
 		panic(err)
@@ -51,7 +51,7 @@ func GetChallenges() []model.Challenge {
 		var title, description, category string
 		err = result.Scan(&id, &title, &description, &category, &points)
 
-		response = append(response, model.Challenge{ID: id, Title: title, Description: description, Category: category, Points: points})
+		response = append(response, model.Challenge{ChallengeID: id, ChallengeTitle: title, ChallengeDescription: description, ChallengeCategory: category, ChallengePoints: points})
 	}
 	return response
 }
@@ -63,11 +63,11 @@ func CreateUser(user model.User) (string, error) {
 		panic(err)
 	}
 
-	stmtIns, err := db.Prepare("INSERT INTO User (ID, Name, Score, Challenges) VALUES(?, ?, ?, ?)")
+	stmtIns, err := db.Prepare("INSERT INTO User (ID, Name, Score) VALUES(?, ?, ?, ?)")
 	if err != nil {
 		return "Failure", err
 	}
-	_, err = stmtIns.Exec(user.ID, user.Name, user.Score, user.Challenges)
+	_, err = stmtIns.Exec(user.UserID, user.UserName, user.UserScore)
 	if err != nil {
 		return "Failure", err
 	}
@@ -81,18 +81,27 @@ func UpdateUser(user model.User, challengeId int, challengePoints int) (string, 
 		panic(err)
 	}
 
-	stmtIns, err := db.Prepare("UPDATE User SET Challenges=?, Score=? WHERE ID=?")
+	//Update Score in User
+	stmtIns, err := db.Prepare("UPDATE User SET Score=? WHERE ID=?")
+	if err != nil {
+		return "Failure", err
+	}
+	userScore := user.UserScore + challengePoints
+	_, err = stmtIns.Exec(userScore, user.UserID)
 	if err != nil {
 		return "Failure", err
 	}
 
-	userScore := user.Score + challengePoints
-	user.Challenges = append(user.Challenges, challengeId) //TODO geht das?
-
-	_, err = stmtIns.Exec(user.Challenges, userScore, user.ID)
+	//Insert done challenge in User-Challenge Table
+	stmtIns2, err := db.Prepare("INSERT INTO UserChallenge (User, Challenge) VALUES(?,?)")
 	if err != nil {
 		return "Failure", err
 	}
+	_, err = stmtIns2.Exec(user.UserID, challengeId)
+	if err != nil {
+		return "Failure", err
+	}
+
 	return "Success", nil
 }
 
