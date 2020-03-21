@@ -58,7 +58,7 @@ func GetChallenges() []model.Challenge {
 		var title, description, category string
 		result.Scan(&id, &title, &description, &category, &points)
 
-		response = append([]model.Challenge{model.Challenge{ID: id, Title: title, Description: description, Category: category, Points: points}})
+		response = append(response, model.Challenge{ID: id, Title: title, Description: description, Category: category, Points: points})
 	}
 	return response
 }
