@@ -1,6 +1,6 @@
 import 'package:app/model/challenge.dart';
 import 'package:flutter/material.dart';
-class ChallengeState extends State<ChallengeCard> {
+class ChallengeCardState extends State<ChallengeCard> {
   Challenge _challenge;
 
   @override
@@ -14,5 +14,5 @@ class ChallengeState extends State<ChallengeCard> {
 
 class ChallengeCard extends StatefulWidget {
   @override
-  ChallengeState createState() => ChallengeState();
+  ChallengeCardState createState() => ChallengeCardState();
 }
