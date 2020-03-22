@@ -95,7 +95,7 @@ class _LoginSignupPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('Stay Home Login'),
+          title: new Text('Socializrs Login'),
         ),
         body: Stack(
           children: <Widget>[
@@ -159,7 +159,7 @@ class _LoginSignupPageState extends State<LoginPage> {
         child: CircleAvatar(
           backgroundColor: Colors.white,
           radius: 100.0,
-          child: Image.asset('lib/assets/logo.png'),
+          child: Image.asset('lib/assets/icon_socializers.png'),
         ),
       ),
     );

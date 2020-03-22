@@ -53,6 +53,7 @@ flutter:
     - lib/assets/
     # flutter does not load the jpg image if this line is not here o.O
     - lib/assets/jasmin-sessler-egqR_zUd4NI-unsplash.jpg
+    - lib/assets/icon_socializers.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
