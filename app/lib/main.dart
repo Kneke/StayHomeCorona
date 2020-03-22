@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Socializrs',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.grey,
@@ -136,7 +136,7 @@ class _HomePageState extends State<HomePage> {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
-              title: Text('Stay Home Challenge'),
+              title: Text('Socializrs'),
             ),
             drawer: Drawer(
               child: Column(
