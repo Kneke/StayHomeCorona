@@ -5,7 +5,7 @@ class ChallengeDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar( backgroundColor: Colors.black,),
+      appBar: AppBar( backgroundColor: Colors.black, iconTheme: IconThemeData(color: Colors.white), ),
       body: ListView(
         children: <Widget>[ Container(
         constraints: BoxConstraints.expand(
