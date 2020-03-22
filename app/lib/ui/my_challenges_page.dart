@@ -53,33 +53,16 @@ class _MyChallengesPageState extends State<MyChallengesPage> {
           ];
         } else {
           // TODO
-          children = <Widget>[
-//            SizedBox(
-//              child: CircularProgressIndicator(),
-//              width: 60,
-//              height: 60,
-//            ),
-//            const Padding(
-//              padding: EdgeInsets.only(top: 16),
-//              child: Text('Lade Challenges...'),
-//            )
-          ];
+          children = <Widget>[];
         }
-//        return Center(
-//          child: Column(
-//            mainAxisAlignment: MainAxisAlignment.center,
-//            crossAxisAlignment: CrossAxisAlignment.center,
-//            children: children,
-//          ),
-//        );
         return SingleChildScrollView(child: Column(children: children));
       },
     );
   }
 
-  List<ChallengeCard> buildDailyChallengeList(List<Challenge> challenges) {
+  List<Widget> buildDailyChallengeList(List<Challenge> challenges) {
     return challenges
-        .map<ChallengeCard>((challenge) => ChallengeCard(challenge: challenge))
+        .map<Widget>((challenge) => Expanded(child: ChallengeCard(challenge: challenge)))
         .toList();
   }
 
