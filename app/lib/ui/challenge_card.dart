@@ -14,42 +14,47 @@ class ChallengeCardState extends State<ChallengeCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Container(
+        child: Stack(children: <Widget>[
+      Container(
         width: 120,
         height: 140,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("lib/assets/jasmin-sessler-egqR_zUd4NI-unsplash.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.album),
-              title: Text(widget.challenge.title),
-              subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
+            image: DecorationImage(
+              image: AssetImage(
+                  "lib/assets/jasmin-sessler-egqR_zUd4NI-unsplash.jpg"),
+              fit: BoxFit.cover,
             ),
-            ButtonBar(
-              children: <Widget>[
-                FlatButton(
-                  child: const Text('Challenge annehmen'),
-                  onPressed: () {
-                    /* ... */
-                  },
-                ),
-                FlatButton(
-                  child: const Text('LISTEN'),
-                  onPressed: () {
-                    /* ... */
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
+            color: Colors.transparent,
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.black, Colors.transparent]),
+            backgroundBlendMode: BlendMode.plus),
       ),
-    );
+      Container(
+        width: 120,
+        height: 70,
+        decoration: BoxDecoration(
+            color: Colors.black,
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withOpacity(0.8),
+                  Colors.transparent.withOpacity(0.0)
+                ])),
+      ),
+      Container(
+        width: 120,
+        height: 70,
+        child: Column(children: <Widget>[
+          Text(
+            widget.challenge.title,
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.white, fontSize: 13),
+          )
+        ]),
+      )
+    ]));
   }
 }
