@@ -6,7 +6,11 @@ class ChallengePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('Challenge Page')
+        child: MaterialButton(
+          onPressed: () {
+
+          },
+        )
       ),
     );
   }

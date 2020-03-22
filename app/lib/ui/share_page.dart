@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
-class DashboardPage extends StatelessWidget {
+class SharePage extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Share'),
+      ),
       body: Center(
-          child: Text('Dashboard Page')
+          child: Text('Share Page')
       ),
     );
   }
