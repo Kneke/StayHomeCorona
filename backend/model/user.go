@@ -7,12 +7,12 @@ type User struct {
 	DayOne    string `json:"dayone"`
 }
 // User Body
-{
-"id": "33edassa65615ad",
-"name": "hannes",
-"score": 25,
-"dayone": ""
-}
+//{
+//"id": "33edassa65615ad",
+//"name": "hannes",
+//"score": 25,
+//"dayone": ""
+//}
 
 type UserUpdate struct {
 	UserID      string `json:"userid"`
