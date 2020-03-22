@@ -1,12 +1,10 @@
+import 'package:app/service/authentication.dart';
+import 'package:app/ui/achievement_page.dart';
 import 'package:app/ui/all_challenges_page.dart';
 import 'package:app/ui/can_do_list_page.dart';
 import 'package:app/ui/good_to_know_page.dart';
 import 'package:app/ui/group_page.dart';
-import 'package:app/service/authentication.dart';
-import 'package:app/ui/achievement_page.dart';
-import 'package:app/ui/dashboard_page.dart';
 import 'package:app/ui/login_page.dart';
-import 'package:app/service/authentication.dart';
 import 'package:app/ui/my_challenges_page.dart';
 import 'package:app/ui/settings_page.dart';
 import 'package:app/ui/share_page.dart';
@@ -85,7 +83,7 @@ class _HomePageState extends State<HomePage> {
           _userMail = user?.email;
         }
         authStatus =
-        user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+            user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
       });
     });
   }
@@ -148,10 +146,9 @@ class _HomePageState extends State<HomePage> {
                         UserAccountsDrawerHeader(
                           accountName: Text('Will Stayathome'),
                           accountEmail: Text('10 Punkte'),
-                          currentAccountPicture:
-                          CircleAvatar(
-                            backgroundImage: AssetImage(
-                                'lib/assets/home_icon.png'),
+                          currentAccountPicture: CircleAvatar(
+                            backgroundImage:
+                                AssetImage('lib/assets/home_icon.png'),
                           ),
                         ),
                         ListTile(
@@ -198,7 +195,7 @@ class _HomePageState extends State<HomePage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => LoginPage()),
-                                (Route<dynamic> route) => false,
+                            (Route<dynamic> route) => false,
                           );
                         },
                       ),
@@ -206,20 +203,18 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Container(
                       child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: ListTile(
-                          leading: Icon(Icons.share),
-                          title: Text('Teilen'),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) =>
-                                  SharePage()),
-                            );
-                          },
-                        ),
-                      )
-                  ),
+                    alignment: Alignment.bottomLeft,
+                    child: ListTile(
+                      leading: Icon(Icons.share),
+                      title: Text('Teilen'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SharePage()),
+                        );
+                      },
+                    ),
+                  )),
                   Container(
                     child: Align(
                       alignment: Alignment.bottomLeft,
@@ -228,8 +223,11 @@ class _HomePageState extends State<HomePage> {
                         leading: Icon(Icons.settings),
                         title: Text('Einstellungen'),
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (
-                              context) => SettingsPage()),);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SettingsPage()),
+                          );
                         },
                       ),
                     ),
