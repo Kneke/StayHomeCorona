@@ -2,19 +2,6 @@ import 'package:app/model/challenge.dart';
 import 'package:app/ui/challenge_card.dart';
 import 'package:flutter/material.dart';
 
-
-//class DashboardPage extends StatelessWidget {
-//  // This widget is the root of your application.
-//  @override
-//  Widget build(BuildContext context) {
-//    return Scaffold(
-//      body: Center(
-//          child: Text('Dashboard Page')
-//      ),
-//    );
-//  }
-//}
-
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -22,35 +9,6 @@ import 'package:flutter/material.dart';
 class MyChallengesPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _MyChallengesPageState();
-}
-
-Future<String> _calculation = Future<String>.delayed(
-  Duration(seconds: 2),
-      () => 'Data Loaded',
-);
-
-Future<String> _response = Future<String>.delayed(
-  Duration(seconds: 2),
-  () =>
-      '{ "values": [{ "id": 1, "title": "Fairness fordern", "points": 25 }, { "id": 2, "title": "Aufgeschobenes erledigen", "points": 10 }] }',
-);
-
-Future<List<Challenge>> _loadChallenges() async {
-  var url = 'http://10.0.2.2:8080/v1/challenges';
-
-  // Await the http get response, then decode the json-formatted response.
-//  var response = await http.get(url);
-  var response = {'body': await _response, 'statusCode': 200};
-//  if (response.statusCode == 200) {
-  List<Challenge> challenges = convert.json
-      .decode(response['body'])['values']
-      .map<Challenge>((c) => Challenge.fromJson(c))
-      .toList();
-  print('Number of books about http: $challenges.');
-  return challenges;
-//  } else {
-//    print('Request failed with status: ${response.statusCode}.');
-//  }
 }
 
 class _MyChallengesPageState extends State<MyChallengesPage> {
@@ -63,42 +21,34 @@ class _MyChallengesPageState extends State<MyChallengesPage> {
       builder: (BuildContext context, AsyncSnapshot<List<Challenge>> snapshot) {
         List<Widget> children;
 
-        var partitionedChallenges = partition(snapshot.data, 2);
+        var partitionedChallenges = partition(snapshot.data, 3);
 
         if (snapshot.hasData) {
           children = <Widget>[
-//            Icon(
-//              Icons.check_circle_outline,
-//              color: Colors.green,
-//              size: 60,
-//            ),
-            Row(children: [Text('Daily Challenges')]),
+
+            getHeaderRow('Daily Challenges'),
             ...partitionedChallenges
                 .map((challenges) =>
                     Row(children: buildDailyChallengeList(challenges)))
                 .toList(),
-            Row(children: [Text('Accepted Challenges')]),
+            getHeaderRow('Challenge accepted! 💪'),
             ...partitionedChallenges
                 .map((challenges) =>
                     Row(children: buildDailyChallengeList(challenges)))
                 .toList(),
           ];
-//            ChallengeCard(challenge: snapshot.data[0])
-//            Padding(
-//              padding: const EdgeInsets.only(top: 16),
-//              child: Text('Result: ${snapshot.data}'),
-//            }
         } else if (snapshot.hasError) {
           children = <Widget>[
-//            Icon(
-//              Icons.error_outline,
-//              color: Colors.red,
-//              size: 60,
-//            ),
-//            Padding(
-//              padding: const EdgeInsets.only(top: 16),
-//              child: Text('Error: ${snapshot.error}'),
-//            )
+            // TODO
+            Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 60,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: Text('Error: ${snapshot.error}'),
+            )
           ];
         } else {
           // TODO
@@ -131,6 +81,15 @@ class _MyChallengesPageState extends State<MyChallengesPage> {
         .map<ChallengeCard>((challenge) => ChallengeCard(challenge: challenge))
         .toList();
   }
+
+  Row getHeaderRow(String text) => Row(children: [
+        Text(text,
+            style: TextStyle(
+              height: 1.5,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ))
+      ]);
 }
 
 List<List<T>> partition<T>(List<T> list, int size) {
@@ -148,3 +107,44 @@ List<List<T>> partition<T>(List<T> list, int size) {
     return [nextAcc, count + 1];
   })[0];
 }
+
+//Future<List<Challenge>> _loadChallenges() async {
+//  var url = 'http://52.59.253.61:8080/v1/challenges';
+//
+//  var response = await http.get(url);
+////  var response = {'body': await _response, 'statusCode': 200};
+//  if (response.statusCode == 200) {
+//    List<Challenge> challenges = convert.json
+//        .decode(response.body)['values']
+//        .map<Challenge>((c) => Challenge.fromJson(c))
+//        .toList();
+//    print('Loaded ${challenges.length} challenges.');
+//    return challenges;
+//  } else {
+//    print('Request failed with status: ${response.statusCode}.');
+//  }
+//}
+
+/// Mock
+Future<List<Challenge>> _loadChallenges() async {
+  var url = 'http://52.59.253.61:8080/v1/challenges';
+
+//  var response = await http.get(url);
+  var response = {'body': await _response, 'statusCode': 200};
+//  if (response.statusCode == 200) {
+  List<Challenge> challenges = convert.json
+      .decode(response['body'])['values']
+      .map<Challenge>((c) => Challenge.fromJson(c))
+      .toList();
+  print('Loaded ${challenges.length} challenges.');
+  return challenges;
+//  } else {
+//    print('Request failed with status: ${response.statusCode}.');
+//  }
+}
+
+Future<String> _response = Future<String>.delayed(
+  Duration(seconds: 2),
+  () =>
+      '{ "values": [{ "id": 1, "title": "Fairness fordern", "points": 25 }, { "id": 2, "title": "Aufgeschobenes erledigen", "points": 10 }, { "id": 3, "title": "Körperliche Betätigung", "points": 10 }] }',
+);

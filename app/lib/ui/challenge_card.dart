@@ -15,8 +15,8 @@ class ChallengeCardState extends State<ChallengeCard> {
   Widget build(BuildContext context) {
     return Card(
       child: Container(
-        width: 190,
-        height: 190,
+        width: 120,
+        height: 140,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("lib/assets/jasmin-sessler-egqR_zUd4NI-unsplash.jpg"),
