@@ -1,8 +1,10 @@
-import 'package:app/ui/achievements_page.dart';
 import 'package:app/ui/all_challenges_page.dart';
 import 'package:app/ui/can_do_list_page.dart';
 import 'package:app/ui/good_to_know_page.dart';
 import 'package:app/ui/group_page.dart';
+import 'package:app/service/authentication.dart';
+import 'package:app/ui/achievement_page.dart';
+import 'package:app/ui/dashboard_page.dart';
 import 'package:app/ui/login_page.dart';
 import 'package:app/service/authentication.dart';
 import 'package:app/ui/my_challenges_page.dart';
@@ -168,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () => _onSelectDrawerItem(2),
                         ),
                         ListTile(
-                          leading: Icon(Icons.star),
+                          leading: Icon(Icons.security),
                           title: Text('Erfolge'),
                           onTap: () => _onSelectDrawerItem(3),
                         ),
