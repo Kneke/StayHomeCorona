@@ -21,8 +21,10 @@ class _AllChallengeState extends State<AllChallengePage> {
       var response = await http.get(url);
       print(response.statusCode);
       if (response.statusCode == 200) {
-        List<Challenge> challengeList =
-            json.decode(response.body)['values'].map<Challenge>((c) => Challenge.fromJson(c)).toList();
+        List<Challenge> challengeList = json
+            .decode(response.body)['values']
+            .map<Challenge>((c) => Challenge.fromJson(c))
+            .toList();
         setState(() {
           allChallenges = challengeList;
         });
@@ -46,7 +48,9 @@ class _AllChallengeState extends State<AllChallengePage> {
               width: double.infinity,
               child: Container(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: Text('Wähle eine Challenge', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)))),
+                  child: Text('Wähle eine Challenge',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20)))),
           Expanded(
               child: GridView.count(
             primary: false,
@@ -61,18 +65,9 @@ class _AllChallengeState extends State<AllChallengePage> {
   }
 
   _getGrindItems() {
-    List<Widget> list = allChallenges.map<Widget>((challenge) =>
-        GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ChallengeDetailPage()),
-              );
-            },
-          child: ChallengeCard(challenge: challenge)
-        )
-    ).toList();
+    List<Widget> list = allChallenges
+        .map<Widget>((challenge) => ChallengeCard(challenge: challenge))
+        .toList();
     return list;
   }
 
