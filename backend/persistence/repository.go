@@ -2,8 +2,10 @@ package persistence
 
 import (
 	"database/sql"
+	"fmt"
 	"main/common"
 	"main/model"
+	"time"
 
 	// We need the mysql databse driver
 	_ "github.com/go-sql-driver/mysql"
@@ -11,6 +13,7 @@ import (
 
 func connectToMySQL() (*sql.DB, error) {
 	dataSourceName := common.LoadEnv("DB_CONNECTION_STRING")
+	dataSourceName = "root:password@tcp(127.0.0.1:3306)/stayathomechallenge"
 
 	// Insert secret connection string
 	return sql.Open("mysql", dataSourceName)
@@ -66,11 +69,16 @@ func CreateUser(user model.User) (string, error) {
 		panic(err)
 	}
 
-	stmtIns, err := db.Prepare("INSERT INTO Users (UserID, UserName, UserScore) VALUES(?, ?, ?)")
+	stmtIns, err := db.Prepare("INSERT INTO Users (UserID, UserName, UserScore, DayOne) VALUES(?, ?, ?, ?)")
 	if err != nil {
 		return "Failure", err
 	}
-	_, err = stmtIns.Exec(user.UserID, user.UserName, user.UserScore)
+
+	t := time.Now()
+	fmt.Println(t.String())
+	fmt.Println(t.Format("2006-01-02 15:04:05"))
+
+	_, err = stmtIns.Exec(user.UserID, user.UserName, user.UserScore, t)
 	if err != nil {
 		return "Failure", err
 	}
