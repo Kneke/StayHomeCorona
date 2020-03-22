@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "746205173613",
+    "firebase_url": "https://stayhomechalle.firebaseio.com",
+    "project_id": "stayhomechalle",
+    "storage_bucket": "stayhomechalle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746205173613:android:9fd270295c9d73ecc9ac64",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746205173613-anta0tvdp8c9vbknof5tcr8ctkbfid61.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbRu25vq6wIcoUQFk3XPXj_0774ga1rkI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746205173613-anta0tvdp8c9vbknof5tcr8ctkbfid61.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

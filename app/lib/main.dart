@@ -1,5 +1,7 @@
+import 'package:app/service/authentication.dart';
 import 'package:app/ui/challenges_page.dart';
 import 'package:app/ui/dashboard_page.dart';
+import 'package:app/ui/login_page.dart';
 import 'package:app/ui/settings_page.dart';
 import 'package:flutter/material.dart';
 
@@ -14,15 +16,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(title: 'Stay Home Challenge'),
+      home: HomePage(auth: Auth()),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+enum AuthStatus {
+  NOT_DETERMINED,
+  NOT_LOGGED_IN,
+  LOGGED_IN,
+}
 
-  final String title;
+class HomePage extends StatefulWidget {
+  HomePage({Key key, this.auth}) : super(key: key);
+
+  final BaseAuth auth;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -47,47 +55,124 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  AuthStatus authStatus = AuthStatus.NOT_DETERMINED;
+  String _userId = "";
+  String _userMail = "";
+
+  @override
+  void initState() {
+    super.initState();
+    widget.auth.getCurrentUser().then((user) {
+      setState(() {
+        if (user != null) {
+          _userId = user?.uid;
+          _userMail = user?.email;
+        }
+        authStatus = user?.uid == null ? AuthStatus.NOT_LOGGED_IN : AuthStatus.LOGGED_IN;
+      });
+    });
+  }
+
+  void loginCallback() {
+    widget.auth.getCurrentUser().then((user) {
+      print(user);
+      setState(() {
+        _userId = user.uid.toString();
+        _userMail = user.email;
+      });
+    });
+    setState(() {
+      authStatus = AuthStatus.LOGGED_IN;
+    });
+  }
+
+  void logoutCallback() {
+    setState(() {
+      authStatus = AuthStatus.NOT_LOGGED_IN;
+      _userId = "";
+      _userMail = "";
+    });
+  }
+
+  Widget buildWaitingScreen() {
+    return Scaffold(
+      body: Container(
+        alignment: Alignment.center,
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text('Will Stayathome'),
-              accountEmail: Text('10 Punkte'),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('lib/assets/home_icon.png'),
+    switch (authStatus) {
+      case AuthStatus.NOT_DETERMINED:
+        return buildWaitingScreen();
+        break;
+      case AuthStatus.NOT_LOGGED_IN:
+        return LoginPage(
+          auth: widget.auth,
+          loginCallback: loginCallback,
+        );
+        break;
+      case AuthStatus.LOGGED_IN:
+        if (_userId.length > 0 && _userId != null) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Stay Home Challenge'),
+            ),
+            drawer: Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  UserAccountsDrawerHeader(
+                    accountName: Text(_userMail),
+                    accountEmail: Text('10 Punkte'),
+                    currentAccountPicture: CircleAvatar(
+                      backgroundImage: AssetImage('lib/assets/home_icon.png'),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.home),
+                    title: Text('Home'),
+                    onTap: () => _onSelectDrawerItem(0),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.assignment),
+                    title: Text('Challenges'),
+                    onTap: () => _onSelectDrawerItem(1),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.settings),
+                    title: Text('Settings'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SettingsPage()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    title: Text('Logout'),
+                    onTap: () {
+                      widget.auth.signOut();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
-              onTap: () => _onSelectDrawerItem(0),
-            ),
-            ListTile(
-              leading: Icon(Icons.assignment),
-              title: Text('Challenges'),
-              onTap: () => _onSelectDrawerItem(1),
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      body: _getPageBody(_selectedPageID),
-    );
+            body: _getPageBody(_selectedPageID),
+          );
+        } else
+          return buildWaitingScreen();
+        break;
+      default:
+        return buildWaitingScreen();
+    }
   }
 }
