@@ -6,6 +6,7 @@ type User struct {
 	UserScore int    `json:"score"`
 	DayOne    string `json:"dayone"`
 }
+
 // User Body
 //{
 //"id": "33edassa65615ad",
@@ -19,6 +20,7 @@ type UserUpdate struct {
 	ChallengeID int    `json:"challengeid"`
 	Points      int    `json:"points"`
 }
+
 // UserUpdate Body
 //{
 //"userid": "33edassa65615ad",
