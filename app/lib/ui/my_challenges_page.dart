@@ -25,16 +25,17 @@ class _MyChallengesPageState extends State<MyChallengesPage> {
 
         if (snapshot.hasData) {
           children = <Widget>[
-
             getHeaderRow('Daily Challenges'),
             ...partitionedChallenges
-                .map((challenges) =>
-                    Row(children: buildDailyChallengeList(challenges)))
+                .map((challenges) => Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: buildDailyChallengeList(challenges)))
                 .toList(),
             getHeaderRow('Challenge accepted! 💪'),
             ...partitionedChallenges
-                .map((challenges) =>
-                    Row(children: buildDailyChallengeList(challenges)))
+                .map((challenges) => Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: buildDailyChallengeList(challenges)))
                 .toList(),
           ];
         } else if (snapshot.hasError) {
