@@ -1,5 +1,5 @@
+import 'package:app/ui/all_challenges_page.dart';
 import 'package:app/service/authentication.dart';
-import 'package:app/ui/challenges_page.dart';
 import 'package:app/ui/dashboard_page.dart';
 import 'package:app/ui/login_page.dart';
 import 'package:app/ui/settings_page.dart';
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return DashboardPage();
       case 1:
-        return ChallengePage();
+        return AllChallengePage();
       default:
         return DashboardPage();
     }
@@ -138,8 +138,8 @@ class _HomePageState extends State<HomePage> {
                     onTap: () => _onSelectDrawerItem(0),
                   ),
                   ListTile(
-                    leading: Icon(Icons.assignment),
-                    title: Text('Challenges'),
+                    leading: Icon(Icons.casino),
+                    title: Text('All Challenges'),
                     onTap: () => _onSelectDrawerItem(1),
                   ),
                   ListTile(
