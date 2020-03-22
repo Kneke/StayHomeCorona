@@ -146,5 +146,5 @@ Future<List<Challenge>> _loadChallenges() async {
 Future<String> _response = Future<String>.delayed(
   Duration(seconds: 2),
   () =>
-      '{ "values": [{ "id": 1, "title": "Fairness fordern", "points": 25 }, { "id": 2, "title": "Aufgeschobenes erledigen", "points": 10 }, { "id": 3, "title": "Körperliche Betätigung", "points": 10 }] }',
+      '{ "values": [{ "id": 1, "title": "Fairness fordern", "duration": "12h ",  "points": 25 }, { "id": 2, "title": "Aufgeschobenes erledigen", "points": 10 }, { "id": 3, "title": "Körperliche Betätigung", "points": 10 }] }',
 );

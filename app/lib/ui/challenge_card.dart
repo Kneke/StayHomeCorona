@@ -46,15 +46,33 @@ class ChallengeCardState extends State<ChallengeCard> {
       ),
       Container(
         width: 120,
-        height: 70,
+        height: 140,
         child: Column(children: <Widget>[
           Text(
             widget.challenge.title,
             style: TextStyle(
                 fontWeight: FontWeight.bold, color: Colors.white, fontSize: 13),
-          )
+          ),
+          Center(
+              child: Chip(
+            avatar: Icon(Icons.timer),
+            label: Text(widget.challenge.duration ?? "1 T"),
+          )),
+          Center(child: getFlameChip())
         ]),
       )
     ]));
+  }
+
+  Chip getFlameChip() {
+    int points = widget.challenge.points;
+    var pointPossibilities = [5,10,25,50];
+    int numFlames = pointPossibilities.indexOf(points) + 1;
+
+    return Chip(
+      backgroundColor: Colors.black,
+      label: Text('🔥' * numFlames + ' +$points',
+          style: TextStyle(color: Colors.white)),
+    );
   }
 }
