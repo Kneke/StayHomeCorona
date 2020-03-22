@@ -47,26 +47,35 @@ class ChallengeCardState extends State<ChallengeCard> {
       Container(
         width: 120,
         height: 140,
-        child: Column(children: <Widget>[
-          Text(
-            widget.challenge.title,
-            style: TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.white, fontSize: 13),
-          ),
-          Center(
-              child: Chip(
-            avatar: Icon(Icons.timer),
-            label: Text(widget.challenge.duration ?? "1 T"),
-          )),
-          Center(child: getFlameChip())
-        ]),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                widget.challenge.title,
+                style: TextStyle(
+                    height: 1.3,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 13),
+              ),
+              Column(
+                children: <Widget>[
+                  Center(
+                      child: Chip(
+                    avatar: Icon(Icons.timer),
+                    label: Text(widget.challenge.duration ?? "1 T"),
+                  )),
+                  Center(child: getFlameChip())
+                ],
+              )
+            ]),
       )
     ]));
   }
 
   Chip getFlameChip() {
     int points = widget.challenge.points;
-    var pointPossibilities = [5,10,25,50];
+    var pointPossibilities = [5, 10, 25, 50];
     int numFlames = pointPossibilities.indexOf(points) + 1;
 
     return Chip(
