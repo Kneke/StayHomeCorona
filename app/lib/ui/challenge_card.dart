@@ -13,8 +13,16 @@ class ChallengeCard extends StatefulWidget {
 class ChallengeCardState extends State<ChallengeCard> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Card(
+    return Card(
+      child: Container(
+        width: 190,
+        height: 190,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("lib/assets/jasmin-sessler-egqR_zUd4NI-unsplash.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -27,11 +35,15 @@ class ChallengeCardState extends State<ChallengeCard> {
               children: <Widget>[
                 FlatButton(
                   child: const Text('Challenge annehmen'),
-                  onPressed: () { /* ... */ },
+                  onPressed: () {
+                    /* ... */
+                  },
                 ),
                 FlatButton(
                   child: const Text('LISTEN'),
-                  onPressed: () { /* ... */ },
+                  onPressed: () {
+                    /* ... */
+                  },
                 ),
               ],
             ),

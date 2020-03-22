@@ -35,16 +35,16 @@ Future<String> _response = Future<String>.delayed(
       '{ "values": [{ "id": 1, "title": "Fairness fordern", "points": 25 }, { "id": 2, "title": "Aufgeschobenes erledigen", "points": 10 }] }',
 );
 
-Future<List<dynamic>> _loadChallenges() async {
+Future<List<Challenge>> _loadChallenges() async {
   var url = 'http://10.0.2.2:8080/v1/challenges';
 
   // Await the http get response, then decode the json-formatted response.
 //  var response = await http.get(url);
   var response = {'body': await _response, 'statusCode': 200};
 //  if (response.statusCode == 200) {
-  List<dynamic> challenges = convert.json
+  List<Challenge> challenges = convert.json
       .decode(response['body'])['values']
-      .map((c) => Challenge.fromJson(c))
+      .map<Challenge>((c) => Challenge.fromJson(c))
       .toList();
   print('Number of books about http: $challenges.');
   return challenges;
@@ -58,25 +58,29 @@ class _MyChallengesPageState extends State<MyChallengesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<dynamic>>(
+    return FutureBuilder<List<Challenge>>(
       future: _loadChallenges(), // a previously-obtained Future<String> or null
-      builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<Challenge>> snapshot) {
         List<Widget> children;
 
+        var partitionedChallenges = partition(snapshot.data, 2);
+
         if (snapshot.hasData) {
-          children = [
+          children = <Widget>[
 //            Icon(
 //              Icons.check_circle_outline,
 //              color: Colors.green,
 //              size: 60,
 //            ),
             Row(children: [Text('Daily Challenges')]),
-            ...snapshot.data
-                .map((challenge) => ChallengeCard(challenge: challenge))
+            ...partitionedChallenges
+                .map((challenges) =>
+                    Row(children: buildDailyChallengeList(challenges)))
                 .toList(),
             Row(children: [Text('Accepted Challenges')]),
-            ...snapshot.data
-                .map((challenge) => ChallengeCard(challenge: challenge))
+            ...partitionedChallenges
+                .map((challenges) =>
+                    Row(children: buildDailyChallengeList(challenges)))
                 .toList(),
           ];
 //            ChallengeCard(challenge: snapshot.data[0])
@@ -85,31 +89,29 @@ class _MyChallengesPageState extends State<MyChallengesPage> {
 //              child: Text('Result: ${snapshot.data}'),
 //            }
         } else if (snapshot.hasError) {
-
           children = <Widget>[
-            Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 60,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Text('Error: ${snapshot.error}'),
-            )
+//            Icon(
+//              Icons.error_outline,
+//              color: Colors.red,
+//              size: 60,
+//            ),
+//            Padding(
+//              padding: const EdgeInsets.only(top: 16),
+//              child: Text('Error: ${snapshot.error}'),
+//            )
           ];
         } else {
-
           // TODO
           children = <Widget>[
-            SizedBox(
-              child: CircularProgressIndicator(),
-              width: 60,
-              height: 60,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 16),
-              child: Text('Lade Challenges...'),
-            )
+//            SizedBox(
+//              child: CircularProgressIndicator(),
+//              width: 60,
+//              height: 60,
+//            ),
+//            const Padding(
+//              padding: EdgeInsets.only(top: 16),
+//              child: Text('Lade Challenges...'),
+//            )
           ];
         }
 //        return Center(
@@ -123,4 +125,26 @@ class _MyChallengesPageState extends State<MyChallengesPage> {
       },
     );
   }
+
+  List<ChallengeCard> buildDailyChallengeList(List<Challenge> challenges) {
+    return challenges
+        .map<ChallengeCard>((challenge) => ChallengeCard(challenge: challenge))
+        .toList();
+  }
+}
+
+List<List<T>> partition<T>(List<T> list, int size) {
+  if (list == null) {
+    return [];
+  }
+  return list.fold([<List<T>>[], 0], (prev, element) {
+    var count = prev[1];
+    List<List<T>> nextAcc = prev[0];
+    if (count % size == 0) {
+      nextAcc.add(<T>[element]);
+    } else {
+      nextAcc.last.add(element);
+    }
+    return [nextAcc, count + 1];
+  })[0];
 }
