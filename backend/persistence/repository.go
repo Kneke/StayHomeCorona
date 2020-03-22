@@ -13,7 +13,6 @@ import (
 
 func connectToMySQL() (*sql.DB, error) {
 	dataSourceName := common.LoadEnv("DB_CONNECTION_STRING")
-	dataSourceName = "root:password@tcp(127.0.0.1:3306)/stayathomechallenge"
 
 	// Insert secret connection string
 	return sql.Open("mysql", dataSourceName)
