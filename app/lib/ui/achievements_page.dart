@@ -119,7 +119,7 @@ Column _achievementsTitleRow() {
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Text(
-        "Du hast folgendes erreicht:",
+        "Du hast Folgendes erreicht:",
         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
     ],
@@ -202,7 +202,7 @@ Column _buildUserRow2(String points, String challengesNr,
       Container(
         margin: new EdgeInsets.symmetric(vertical: 4.0),
         width: 200.0,
-        height: 32.0,
+        height: 35.0,
         alignment: Alignment.centerRight,
         child: Text("Punkte: 🔥" + points,
             style: new TextStyle(
@@ -215,7 +215,7 @@ Column _buildUserRow2(String points, String challengesNr,
       Container(
         margin: new EdgeInsets.symmetric(vertical: 4.0),
         width: 200.0,
-        height: 32.0,
+        height: 35.0,
         alignment: Alignment.centerRight,
         child: Text("Erledigte Challenges: 💪" + challengesNr,
             style: new TextStyle(
@@ -228,7 +228,7 @@ Column _buildUserRow2(String points, String challengesNr,
       Container(
         margin: new EdgeInsets.symmetric(vertical: 4.0),
         width: 200.0,
-        height: 32.0,
+        height: 35.0,
         alignment: Alignment.centerRight,
         child: Text("Geteilte Inhalte: 🤳" + sharedChallenges,
             style: new TextStyle(
@@ -241,7 +241,7 @@ Column _buildUserRow2(String points, String challengesNr,
       Container(
         margin: new EdgeInsets.symmetric(vertical: 4.0),
         width: 200.0,
-        height: 32.0,
+        height: 35.0,
         alignment: Alignment.centerRight,
         child: Text("Challenge Freunde: 😎" + friendsNr,
             style: new TextStyle(
