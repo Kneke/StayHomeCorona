@@ -3,6 +3,9 @@ import 'package:app/model/challenge.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
+import 'challenge_card.dart';
+import 'challenge_detail_page.dart';
+
 const url = 'http://52.59.253.61:8080/v1/challenges';
 
 class AllChallengePage extends StatefulWidget {
@@ -47,9 +50,8 @@ class _AllChallengeState extends State<AllChallengePage> {
           Expanded(
               child: GridView.count(
             primary: false,
-            padding: EdgeInsets.all(20),
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
+            padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
+            childAspectRatio: 0.8,
             crossAxisCount: 3,
             children: _getGrindItems(),
           )),
@@ -60,12 +62,17 @@ class _AllChallengeState extends State<AllChallengePage> {
 
   _getGrindItems() {
     List<Widget> list = allChallenges.map<Widget>((challenge) =>
-        Container(
-          padding: EdgeInsets.all(8),
-          child: Text(challenge.title, style: TextStyle(),),
-          color: Colors.deepPurple,
-        ))
-        .toList();
+        GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ChallengeDetailPage()),
+              );
+            },
+          child: ChallengeCard(challenge: challenge)
+        )
+    ).toList();
     return list;
   }
 
