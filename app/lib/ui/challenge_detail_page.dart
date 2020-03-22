@@ -1,9 +1,13 @@
+import 'package:app/model/challenge.dart';
 import 'package:flutter/material.dart';
 
 class ChallengeDetailPage extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    final Challenge challenge = ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       appBar: AppBar( backgroundColor: Colors.black, iconTheme: IconThemeData(color: Colors.white), ),
       body: ListView(
@@ -19,7 +23,7 @@ class ChallengeDetailPage extends StatelessWidget {
             fit: BoxFit.fitWidth,
           ), 
         ),
-        child: new Text('Fairness', style: new TextStyle( color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30.0)
+        child: new Text(challenge.title, style: new TextStyle( color: Colors.white, fontWeight: FontWeight.bold, fontSize: 30.0)
         )
       ),
       Container(
