@@ -1,5 +1,5 @@
 import 'package:app/service/authentication.dart';
-import 'package:app/ui/achievement_page.dart';
+import 'package:app/ui/achievements_page.dart';
 import 'package:app/ui/all_challenges_page.dart';
 import 'package:app/ui/can_do_list_page.dart';
 import 'package:app/ui/good_to_know_page.dart';
@@ -134,6 +134,7 @@ class _HomePageState extends State<HomePage> {
         if (_userId.length > 0 && _userId != null) {
           return Scaffold(
             appBar: AppBar(
+              backgroundColor: Colors.white,
               title: Text('Stay Home Challenge'),
             ),
             drawer: Drawer(

@@ -62,8 +62,8 @@ class _AllChallengeState extends State<AllChallengePage> {
     List<Widget> list = allChallenges.map<Widget>((challenge) =>
         Container(
           padding: EdgeInsets.all(8),
-          child: Text(challenge.title),
-          color: Colors.teal[100],
+          child: Text(challenge.title, style: TextStyle(),),
+          color: Colors.deepPurple,
         ))
         .toList();
     return list;
