@@ -21,18 +21,24 @@ class _MyChallengesPageState extends State<MyChallengesPage> {
       builder: (BuildContext context, AsyncSnapshot<List<Challenge>> snapshot) {
         List<Widget> children;
 
-        var partitionedChallenges = partition(snapshot.data, 3);
+        List<Challenge> challenges = snapshot.data;
+        var isDaily = (challenge) => challenge.category == 'daily';
+        List<Challenge> dailyChallenges = challenges.where(isDaily).toList();
+        List<Challenge> otherChallenges =
+            challenges.where((challenge) => !isDaily(challenge)).toList();
+        var partitionedDailyChallenges = partition(dailyChallenges, 3);
+        var partitionedAcceptedChallenges = partition(otherChallenges, 3);
 
         if (snapshot.hasData) {
           children = <Widget>[
             getHeaderRow('Daily Challenges'),
-            ...partitionedChallenges
+            ...partitionedDailyChallenges
                 .map((challenges) => Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: buildDailyChallengeList(challenges)))
                 .toList(),
             getHeaderRow('Challenge accepted! 💪'),
-            ...partitionedChallenges
+            ...partitionedAcceptedChallenges
                 .map((challenges) => Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: buildDailyChallengeList(challenges)))
@@ -92,40 +98,34 @@ List<List<T>> partition<T>(List<T> list, int size) {
   })[0];
 }
 
-//Future<List<Challenge>> _loadChallenges() async {
-//  var url = 'http://52.59.253.61:8080/v1/challenges';
-//
-//  var response = await http.get(url);
-////  var response = {'body': await _response, 'statusCode': 200};
-//  if (response.statusCode == 200) {
-//    List<Challenge> challenges = convert.json
-//        .decode(response.body)['values']
-//        .map<Challenge>((c) => Challenge.fromJson(c))
-//        .toList();
-//    print('Loaded ${challenges.length} challenges.');
-//    return challenges;
-//  } else {
-//    print('Request failed with status: ${response.statusCode}.');
-//  }
-//}
-
-/// Mock
 Future<List<Challenge>> _loadChallenges() async {
   var url = 'http://52.59.253.61:8080/v1/challenges';
 
-//  var response = await http.get(url);
-  var response = {'body': await _response, 'statusCode': 200};
-//  if (response.statusCode == 200) {
-  List<Challenge> challenges = convert.json
-      .decode(response['body'])['values']
-      .map<Challenge>((c) => Challenge.fromJson(c))
-      .toList();
-  print('Loaded ${challenges.length} challenges.');
-  return challenges;
-//  } else {
-//    print('Request failed with status: ${response.statusCode}.');
-//  }
+  var response = await http.get(url);
+  if (response.statusCode == 200) {
+    List<Challenge> challenges = convert.json
+        .decode(response.body)['values']
+        .map<Challenge>((c) => Challenge.fromJson(c))
+        .toList();
+    print('Loaded ${challenges.length} challenges.');
+    return challenges;
+  } else {
+    print('Request failed with status: ${response.statusCode}.');
+  }
 }
+
+/// Mock
+//Future<List<Challenge>> _loadChallenges() async {
+//  var url = 'http://52.59.253.61:8080/v1/challenges';
+//
+//  var response = {'body': await _response, 'statusCode': 200};
+//  List<Challenge> challenges = convert.json
+//      .decode(response['body'])['values']
+//      .map<Challenge>((c) => Challenge.fromJson(c))
+//      .toList();
+//  print('Loaded ${challenges.length} challenges.');
+//  return challenges;
+//}
 
 Future<String> _response = Future<String>.delayed(
   Duration(seconds: 2),
