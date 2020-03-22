@@ -1,5 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
+
+const userEndpoint = 'http://52.59.253.61:8080/v1/user';
 
 abstract class BaseAuth {
   Future<String> signIn(String email, String password);
@@ -29,6 +33,20 @@ class Auth implements BaseAuth {
     AuthResult result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
     FirebaseUser user = result.user;
+    try {
+      var map = new Map<String, dynamic>();
+      map["id"] = user.uid;
+      map["name"] = user.displayName;
+      map["score"] = 0;
+      var response = await http.post(userEndpoint, body: json.encode(map));
+      if (response.statusCode != 200) {
+        print('Request failed with status: ${response.statusCode}.');
+        return null;
+      }
+    } on Exception catch (e) {
+      print('Request failed with error: $e.');
+      return null;
+    }
     return user.uid;
   }
 

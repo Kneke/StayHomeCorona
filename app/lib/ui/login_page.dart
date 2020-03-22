@@ -45,8 +45,6 @@ class _LoginSignupPageState extends State<LoginPage> {
           print('Signed in: $userId');
         } else {
           userId = await widget.auth.signUp(_email, _password);
-          //widget.auth.sendEmailVerification();
-          //_showVerifyEmailSentDialog();
           print('Signed up user: $userId');
         }
         setState(() {
@@ -55,6 +53,12 @@ class _LoginSignupPageState extends State<LoginPage> {
 
         if (userId.length > 0 && userId != null && _isLoginForm) {
           widget.loginCallback();
+        } else {
+          setState(() {
+            _isLoading = false;
+            _errorMessage = 'Network error please try again later';
+            _formKey.currentState.reset();
+          });
         }
       } catch (e) {
         print('Error: $e');
