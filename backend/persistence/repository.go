@@ -114,6 +114,37 @@ func UpdateUser(userupdate model.UserUpdate) (string, error) {
 	return "Success", nil
 }
 
+func GetUser(id string) model.User {
+	var user model.User
+
+	db, err := connectToMySQL()
+	if err != nil {
+		panic(err)
+	}
+	rows, err := db.Query("SELECT * FROM Users WHERE UserID=?", id)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var (
+			userID, UserName, DayOne string
+			UserScore                int
+		)
+		err = rows.Scan(&userID, &UserName, &UserScore, &DayOne)
+
+		user = model.User{
+			UserID:    userID,
+			UserName:  UserName,
+			UserScore: UserScore,
+			DayOne:    DayOne,
+		}
+	}
+
+	return user
+}
+
 func GetRanking() model.Ranking {
 	var ranking model.Ranking
 

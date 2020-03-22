@@ -16,6 +16,7 @@ func main() {
 		v1.POST("/challenges", createChallengeHandler)
 		v1.GET("/challenges", challengeHandler)
 		v1.POST("/user", createUser)
+		v1.GET("/user", getUser)
 		v1.POST("/challengeDone", challengeDoneHandler)
 		v1.GET("/ranking", getRanking)
 
@@ -62,6 +63,23 @@ func getRanking(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"values": ranking,
 	})
+}
+
+func getUser(c *gin.Context) {
+	var uis userIdStruct
+
+	if c.BindJSON(&uis) == nil {
+		fmt.Println(uis)
+		user := persistence.GetUser(uis.Userid)
+		fmt.Println(user)
+		c.JSON(200, gin.H{
+			"values": user,
+		})
+	}
+}
+
+type userIdStruct struct {
+	Userid string `json:"userid"`
 }
 
 func createUser(c *gin.Context) {
