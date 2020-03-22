@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
-              title: Text('Stay Home Challenge'),
+              title: Text('Socializrs'),
             ),
             drawer: Drawer(
               child: Column(
