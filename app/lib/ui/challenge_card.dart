@@ -17,10 +17,15 @@ class ChallengeCardState extends State<ChallengeCard> {
     return Expanded(
         flex: 3,
         child: Card(
-            child: InkWell (
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(settings: RouteSettings(arguments: this.widget.challenge), builder: (context) => ChallengeDetailPage()));
-              },
+            child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          settings:
+                              RouteSettings(arguments: this.widget.challenge),
+                          builder: (context) => ChallengeDetailPage()));
+                },
                 child: Stack(children: <Widget>[
                   Container(
                     height: 140,
@@ -38,7 +43,6 @@ class ChallengeCardState extends State<ChallengeCard> {
                         backgroundBlendMode: BlendMode.plus),
                   ),
                   Container(
-                    width: 120,
                     height: 70,
                     decoration: BoxDecoration(
                         color: Colors.black,
@@ -51,7 +55,6 @@ class ChallengeCardState extends State<ChallengeCard> {
                             ])),
                   ),
                   Container(
-                    width: 120,
                     height: 140,
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,16 +71,15 @@ class ChallengeCardState extends State<ChallengeCard> {
                             children: <Widget>[
                               Center(
                                   child: Chip(
-                                    avatar: Icon(Icons.timer),
-                                    label: Text(widget.challenge.duration ?? "1 T"),
-                                  )),
+                                avatar: Icon(Icons.timer),
+                                label: Text(widget.challenge.duration ?? "1 T"),
+                              )),
                               Center(child: getFlameChip())
                             ],
                           )
                         ]),
                   )
-                ]))
-    ));
+                ]))));
   }
 
   Chip getFlameChip() {
