@@ -66,17 +66,26 @@ class ChallengeCardState extends State<ChallengeCard> {
                       ),
                       Column(
                         children: <Widget>[
-                          Center(
-                              child: Chip(
-                            avatar: Icon(Icons.timer),
-                            label: Text(widget.challenge.duration ?? "1 T"),
-                          )),
+                          Center(child: getDurationChip()),
                           Center(child: getFlameChip())
                         ],
                       )
                     ]),
               )
             ])));
+  }
+
+  Chip getDurationChip() {
+    return Chip(
+      avatar: Icon(
+        Icons.timer,
+        size: 12,
+      ),
+      label: Text(
+        widget.challenge.duration ?? "1 T",
+        style: TextStyle(fontSize: 12),
+      ),
+    );
   }
 
   Chip getFlameChip() {
@@ -87,7 +96,7 @@ class ChallengeCardState extends State<ChallengeCard> {
     return Chip(
       backgroundColor: Colors.black,
       label: Text('🔥' * (numFlames != 0 ? numFlames : 1) + ' +$points',
-          style: TextStyle(color: Colors.white)),
+          style: TextStyle(color: Colors.white, fontSize: 12)),
     );
   }
 }
